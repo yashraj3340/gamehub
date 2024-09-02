@@ -3,6 +3,10 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "framer-motion": "^11.0.20"
+    "framer-motion": "^11.0.20",
+    "react-scripts": "^5.0.1"
+  },
+  "scripts": {
+    "dev": "react-scripts start"
   }
 }

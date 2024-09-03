@@ -1,5 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import apiClient from "../services/api-client";
+import platforms from "../data/platforms";
+import APIClient, { FetchResponse } from "../services/api-client";
+
+const apiClient = new APIClient<Platform>("/platforms/lists/parents");
 
 export interface Platform {
   id: number;
@@ -7,18 +10,16 @@ export interface Platform {
   slug: string;
 }
 
-const usePlatforms = () =>
-  useQuery<Platform[]>({
-    queryKey: ["platforms"],
-    queryFn: async () => {
-      try {
-        const response = await apiClient.get("/platforms/lists/parents");
-        return response.data.results;
-      } catch (error) {
-        throw new Error("Failed to fetch platforms");
-      }
-    },
+const usePlatforms = () => {
+  return useQuery<FetchResponse<Platform>, Error>({
+    queryKey: ["platforms"] as const, // Provide the correct type for queryKey
+    queryFn: () => apiClient.getAll, // Make sure to call the function
     staleTime: 1000 * 60 * 60 * 24, // 24 hours
+    initialData: {
+      count: platforms.length,
+      results: platforms,
+    },
   });
+};
 
 export default usePlatforms;

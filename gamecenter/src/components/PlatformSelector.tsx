@@ -1,28 +1,32 @@
-import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import React from "react";
+import { Menu, MenuButton, MenuList, MenuItem, Button } from "@chakra-ui/react";
 import { BsChevronDown } from "react-icons/bs";
-import usePlatforms, { Platform } from "../hooks/usePlatforms";
+import usePlatforms from "../hooks/usePlatforms";
+import { Platform } from "../hooks/usePlatforms";
 
-interface Props {
-  onSelectPlatform: (platform: Platform) => void;
+interface PlatformSelectorProps {
   selectedPlatform: Platform | null;
+  onSelectPlatform: (platform: Platform) => void;
 }
 
-const PlatformSelector = ({ onSelectPlatform, selectedPlatform }: Props) => {
-  const { data, error } = usePlatforms();
+const PlatformSelector: React.FC<PlatformSelectorProps> = ({
+  selectedPlatform,
+  onSelectPlatform,
+}) => {
+  const { data, error, isLoading } = usePlatforms();
 
-  if (error || !data) {
-    return null; // Handle error or loading state accordingly
-  }
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading platforms</div>;
 
   console.log(data);
 
   return (
     <Menu>
       <MenuButton as={Button} rightIcon={<BsChevronDown />}>
-        {selectedPlatform?.name || " Platforms"}
+        {selectedPlatform?.name || "Platforms"}
       </MenuButton>
       <MenuList>
-        {(data as Platform[])?.map((platform: Platform) => (
+        {data?.results?.map((platform: Platform) => (
           <MenuItem
             key={platform.id}
             onClick={() => onSelectPlatform(platform)}

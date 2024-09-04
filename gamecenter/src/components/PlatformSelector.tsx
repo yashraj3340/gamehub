@@ -5,15 +5,18 @@ import usePlatforms from "../hooks/usePlatforms";
 import { Platform } from "../hooks/usePlatforms";
 
 interface PlatformSelectorProps {
-  selectedPlatform: Platform | null;
+  selectedPlatformId?: number;
   onSelectPlatform: (platform: Platform) => void;
 }
 
 const PlatformSelector: React.FC<PlatformSelectorProps> = ({
-  selectedPlatform,
+  selectedPlatformId,
   onSelectPlatform,
 }) => {
   const { data, error, isLoading } = usePlatforms();
+  const selectedPlatform = data?.results.find(
+    (p) => p.id === selectedPlatformId
+  );
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading platforms</div>;

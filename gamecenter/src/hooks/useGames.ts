@@ -37,6 +37,7 @@ const useGames = (gameQuery: GameQuery) => {
       const nextPage = lastPage.next ? allPages.length + 1 : undefined;
       return nextPage;
     },
+    staleTime: 24 * 60 * 60 * 1000, //24h
   });
 };
 
